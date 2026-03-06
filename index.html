@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADIO VENEZUELA — Military & Regime Communications Intelligence</title>
+    <meta name="description" content="Open-source intelligence mapping of Venezuela's military communications: 130+ HF frequencies, satellite infrastructure, air defense systems, and the five-country spy pipeline.">
+    <meta property="og:title" content="RADIO VENEZUELA — Military Communications Intelligence">
+    <meta property="og:description" content="130+ military frequencies. A dead $390M satellite. A five-country spy pipeline. The most comprehensive OSINT map of Venezuela's military comms ever assembled.">
+    <meta property="og:type" content="article">
+    <style>
+        :root {
+            --yellow: #FFCC00;
+            --blue: #00247D;
+            --red: #CF142B;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --border: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Venezuelan flag stripe at top */
+        .flag-stripe {
+            height: 6px;
+            display: flex;
+        }
+        .flag-stripe .yellow { flex: 1; background: var(--yellow); }
+        .flag-stripe .blue { flex: 1; background: var(--blue); }
+        .flag-stripe .red { flex: 1; background: var(--red); }
+
+        /* Hero header */
+        .hero {
+            background: var(--blue);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255,204,0,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(207,20,43,0.08) 0%, transparent 50%);
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            color: var(--yellow);
+        }
+
+        .hero .subtitle {
+            font-size: 1.15em;
+            opacity: 0.9;
+            max-width: 750px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+
+        .hero .meta {
+            font-size: 0.85em;
+            opacity: 0.65;
+            position: relative;
+        }
+
+        .hero .meta span {
+            margin: 0 10px;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            background: var(--light-gray);
+            border-bottom: 3px solid var(--yellow);
+            padding: 25px 20px;
+        }
+
+        .stats-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat {
+            padding: 10px;
+        }
+
+        .stat .number {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--blue);
+            line-height: 1;
+        }
+
+        .stat .label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Main content */
+        .content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 50px 25px;
+        }
+
+        .content h2 {
+            font-size: 1.8em;
+            color: var(--blue);
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--yellow);
+        }
+
+        .content h2:first-child {
+            margin-top: 0;
+        }
+
+        .content h3 {
+            font-size: 1.3em;
+            color: var(--text);
+            margin: 30px 0 12px;
+        }
+
+        .content p {
+            margin-bottom: 18px;
+            font-size: 1.05em;
+        }
+
+        .content ul {
+            margin: 0 0 20px 25px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            font-size: 1.02em;
+        }
+
+        .content strong {
+            color: var(--text);
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: var(--light-gray);
+            border-left: 5px solid var(--red);
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .highlight-box.blue-border {
+            border-left-color: var(--blue);
+        }
+
+        .highlight-box.yellow-border {
+            border-left-color: var(--yellow);
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Key findings */
+        .finding {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 15px 0;
+            transition: box-shadow 0.2s;
+        }
+
+        .finding:hover {
+            box-shadow: 0 4px 15px rgba(0,36,125,0.1);
+        }
+
+        .finding .finding-number {
+            display: inline-block;
+            background: var(--blue);
+            color: var(--yellow);
+            font-weight: 800;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        .finding .finding-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            display: inline;
+        }
+
+        .finding .finding-body {
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-size: 0.95em;
+        }
+
+        /* Data table styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.92em;
+        }
+
+        .data-table th {
+            background: var(--blue);
+            color: var(--white);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        .data-table tr:hover {
+            background: rgba(255,204,0,0.1);
+        }
+
+        /* Tag/badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-red { background: var(--red); color: white; }
+        .badge-blue { background: var(--blue); color: white; }
+        .badge-yellow { background: var(--yellow); color: var(--text); }
+        .badge-gray { background: #666; color: white; }
+
+        /* Pipeline diagram */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 30px 0;
+            padding: 25px;
+            background: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .pipeline-node {
+            background: var(--blue);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9em;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .pipeline-node.china { background: #DE2910; }
+        .pipeline-node.cuba { background: #002a8f; }
+        .pipeline-node.venezuela { background: var(--yellow); color: var(--text); }
+        .pipeline-node.russia { background: #1C3578; }
+        .pipeline-node.iran { background: #239F40; }
+
+        .pipeline-arrow {
+            font-size: 1.5em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Section nav */
+        .section-nav {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+
+        .section-nav h3 {
+            margin: 0 0 15px;
+            color: var(--blue);
+        }
+
+        .section-nav ol {
+            columns: 2;
+            column-gap: 30px;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .section-nav li {
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .section-nav a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        .section-nav a:hover {
+            text-decoration: underline;
+            color: var(--red);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--blue);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        footer .classification {
+            display: inline-block;
+            border: 1px solid var(--yellow);
+            color: var(--yellow);
+            padding: 5px 18px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.9em; }
+            .hero .subtitle { font-size: 1em; }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .stat .number { font-size: 1.5em; }
+            .section-nav ol { columns: 1; }
+            .pipeline { flex-direction: column; }
+            .pipeline-arrow { transform: rotate(90deg); }
+            .content { padding: 30px 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="flag-stripe">
+    <div class="yellow"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+</div>
+
+<header class="hero">
+    <h1>RADIO <span>VENEZUELA</span></h1>
+    <p class="subtitle">Military & Regime Communications Intelligence — The Most Comprehensive Open-Source Map of Venezuela's Military Comms Architecture</p>
+    <p class="meta">
+        <span>By ringmast4r</span>
+        <span>|</span>
+        <span>March 2026</span>
+        <span>|</span>
+        <span>OSINT &mdash; Open Source</span>
+    </p>
+    <div class="visitor-counter" style="margin-top: 20px; position: relative;">
+        <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fringmast4r.github.io%2Fradio-venezuela&label=VIEWS&labelColor=%2300247D&countColor=%23FFCC00" alt="visitor count">
+    </div>
+</header>
+
+<div class="stats-bar">
+    <div class="stats-grid">
+        <div class="stat">
+            <div class="number">130+</div>
+            <div class="label">HF Frequencies</div>
+        </div>
+        <div class="stat">
+            <div class="number">130+</div>
+            <div class="label">ALE Call Signs</div>
+        </div>
+        <div class="stat">
+            <div class="number">42</div>
+            <div class="label">Naval Vessels</div>
+        </div>
+        <div class="stat">
+            <div class="number">220</div>
+            <div class="label">Military Bases</div>
+        </div>
+        <div class="stat">
+            <div class="number">5</div>
+            <div class="label">Countries in Pipeline</div>
+        </div>
+        <div class="stat">
+            <div class="number">$390M</div>
+            <div class="label">Dead Satellite</div>
+        </div>
+    </div>
+</div>
+
+<main class="content">
+
+    <div class="section-nav">
+        <h3>Contents</h3>
+        <ol>
+            <li><a href="#hf-backbone">The HF Radio Backbone</a></li>
+            <li><a href="#satellite">The Satellite Is Dead</a></li>
+            <li><a href="#ground-stations">Ground Stations Inside Military Bases</a></li>
+            <li><a href="#air-defense">Air Defense &mdash; The Paper Tiger</a></li>
+            <li><a href="#pipeline">The Five-Country Intelligence Pipeline</a></li>
+            <li><a href="#operation">Operation Absolute Resolve &mdash; Cyber Dimension</a></li>
+            <li><a href="#infrastructure">Exposed Infrastructure</a></li>
+            <li><a href="#starlink">Starlink &mdash; The Regime's Nightmare</a></li>
+            <li><a href="#naval">Naval Order of Battle 2026</a></li>
+            <li><a href="#findings">Key Findings</a></li>
+        </ol>
+    </div>
+
+    <!-- SECTION 1 -->
+    <h2 id="hf-backbone">1. The HF Radio Backbone</h2>
+
+    <p>Venezuela's military runs on High Frequency radio. Not as a backup &mdash; as the <strong>backbone</strong>.</p>
+
+    <p>The Fuerza Armada Nacional Bolivariana (FANB) operates across six military regions, each with a Regional Command Center (CRC). Long-range command and control between these regions uses HF bands (3&ndash;30 MHz) with Automatic Link Establishment (ALE) &mdash; a protocol that automatically selects the best frequency, identifies stations by call sign, and logs every connection attempt.</p>
+
+    <div class="highlight-box blue-border">
+        <p><strong>What I documented:</strong></p>
+        <ul>
+            <li><strong>45+ Army HF frequencies</strong> across 5 infantry divisions + General Staff</li>
+            <li><strong>70+ Navy HF frequencies</strong> covering all maritime operations</li>
+            <li><strong>50+ Army ALE identifiers</strong> mapped to specific units, bases, and command elements</li>
+            <li><strong>80+ Navy ALE identifiers</strong> including individual ship call signs for 25+ vessels</li>
+            <li><strong>4 documented ALE networks</strong> &mdash; Riverine HQ, Riverine Forces, Coast Guard, Riverine Ops</li>
+            <li><strong>3 cross-branch shared frequencies</strong> &mdash; Army, Navy, and National Guard on the same channels</li>
+        </ul>
+    </div>
+
+    <p>Those three shared frequencies are the critical finding. Army, Navy, and National Guard all communicate on them. <strong>Monitor one branch, hear all three.</strong></p>
+
+    <h3>Cross-Branch Shared Frequencies</h3>
+    <table class="data-table">
+        <thead><tr><th>Frequency (kHz)</th><th>Branches</th><th>Mode</th></tr></thead>
+        <tbody>
+            <tr><td><strong>7849.0</strong></td><td>Army, Navy, National Guard</td><td>USB/LSB</td></tr>
+            <tr><td><strong>10272.0</strong></td><td>Army, Navy, National Guard</td><td>USB</td></tr>
+            <tr><td><strong>10600.0</strong></td><td>Army, Navy, National Guard</td><td>USB</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Army HF Frequencies (USB/ALE)</h3>
+    <table class="data-table">
+        <thead><tr><th>Unit</th><th>Frequencies (kHz)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>General Staff / C2</strong></td><td>7849.0, 8060.0, 9795.0, 10600.0, 11155.0, 12191.0, 13449.0</td></tr>
+            <tr><td><strong>General Profile</strong></td><td>7516.0, 7849.0, 8060.0, 8181.0, 10600.0, 11601.0, 12161.0, 14569.0</td></tr>
+            <tr><td><strong>1st Infantry Division</strong></td><td>8184.0, 8260.0, 11625.0, 12191.0, 13500.0</td></tr>
+            <tr><td><strong>2nd Infantry Division</strong></td><td>5760.0, 6870.0, 7597.0, 8060.0, 8187.0, 9052.0, 9232.0, 10156.0, 11610.0, 13449.0</td></tr>
+            <tr><td><strong>3rd Infantry Division</strong></td><td>7597.0, 8050.0, 9232.0, 9259.0, 10150.0, 12191.0, 13464.0, 13506.0</td></tr>
+            <tr><td><strong>4th Infantry Division</strong></td><td>9795.0, 12185.0, 13455.0</td></tr>
+            <tr><td><strong>5th Infantry Division</strong></td><td>5406.0, 6786.0, 7399.0, 9233.0, 9906.0, 10115.0, 12191.0, 14569.0</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Army ALE Address Identifiers (50+)</h3>
+    <table class="data-table">
+        <thead><tr><th>Call Sign</th><th>Unit / Function</th></tr></thead>
+        <tbody>
+            <tr><td><strong>CGE</strong></td><td>Army Headquarters (Cuartel General de Ejercito)</td></tr>
+            <tr><td><strong>CGEJM</strong></td><td>Army Mobile HQs</td></tr>
+            <tr><td><strong>CLC</strong></td><td>Local Communications Center</td></tr>
+            <tr><td><strong>CLC22M</strong></td><td>Mobile Command Post, 22nd Infantry Brigade</td></tr>
+            <tr><td><strong>CLC23M</strong></td><td>Mobile Command Post, 23rd Special Operations Brigade</td></tr>
+            <tr><td><strong>CLC51</strong></td><td>51st Jungle Infantry Brigade</td></tr>
+            <tr><td><strong>CLM</strong></td><td>Maintenance Logistics Center</td></tr>
+            <tr><td><strong>CRC</strong></td><td>Regional Command Center</td></tr>
+            <tr><td><strong>CCM</strong></td><td>Mobile Command Center</td></tr>
+            <tr><td><strong>C5F</strong></td><td>Civil Affairs (Asuntos Civiles)</td></tr>
+            <tr><td><strong>CUFAN</strong></td><td>Unified Command of National Armed Forces</td></tr>
+            <tr><td><strong>CUFAN1</strong></td><td>Personnel Division</td></tr>
+            <tr><td><strong>CUFAN2</strong></td><td>Intelligence Division</td></tr>
+            <tr><td><strong>CUFAN3</strong></td><td>Operations Division</td></tr>
+            <tr><td><strong>CUFAN4</strong></td><td>Logistics Division</td></tr>
+            <tr><td><strong>CUFAN5</strong></td><td>Civil Affairs Division</td></tr>
+            <tr><td><strong>CUFAN6</strong></td><td>Command &amp; Control Division</td></tr>
+            <tr><td><strong>MIRA1</strong></td><td>Presidential Palace (Miraflores) &mdash; Military Command Element</td></tr>
+            <tr><td><strong>MIRA2</strong></td><td>Presidential Palace &mdash; Military Command Element</td></tr>
+            <tr><td><strong>MIRA3</strong></td><td>Presidential Palace &mdash; Military Command Element</td></tr>
+            <tr><td><strong>PCRC</strong></td><td>Regional Command Post Communications</td></tr>
+            <tr><td><strong>PCRM</strong></td><td>Regional Command Post Mobile</td></tr>
+            <tr><td><strong>PNME</strong></td><td>Riverine Forces River Post</td></tr>
+            <tr><td><strong>PORLAMAR</strong></td><td>Destacamento de Apoyo A&eacute;reo #7</td></tr>
+            <tr><td><strong>RESERVA1-10</strong></td><td>Infantry/Armor Battalion Reserves</td></tr>
+            <tr><td><strong>SCLC</strong></td><td>Subordinate Local Communications Center</td></tr>
+            <tr><td><strong>SCLC222M</strong></td><td>Mobile Command Post, 222nd Infantry Battalion</td></tr>
+            <tr><td><strong>SCLC512</strong></td><td>512th Jungle Infantry Battalion</td></tr>
+            <tr><td><strong>SCLM</strong></td><td>Maintenance Logistics Service Center</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Navy HF Frequencies (70+)</h3>
+    <div class="highlight-box blue-border">
+        <p><strong>All Navy frequencies (kHz):</strong> 4390.0L, 4632.0U, 5439.0L, 6248.0L, 6260.0L, 6265.0L, 6335.0L, 6357.0L, 6360.0L, 6880.0L, 6888.0L, 6890.0U, 6894.0L, 6895.0U, 7849.0U/L, 8060.0L, 8260.0L, 8270.0L, 8280.0L, 8285.0L, 8291.0L, 8297.0L, 8340.0L, 8358.0L, 8500.0L, 8525.0L, 8540.0L, 8582.0L, 8810.0L, 8825.0U/L, 9017.0L, 9070.0L, 9075.0L, 9190.0U, 9350.0L, 9355.0L, 9380.0L, 9390.0L, 9400.0L, 10272.0U, 10590.0L, 10600.0U, 10650.0L, 12220.0L, 12479.0L, 12480.0L, 12510.0L, 12528.5L, 12537.0U, 12546.0L, 12600.0L, 12660.0L, 13139.0L, 13500.0U, 14759.0L, 14790.0L, 14911.0L, 15536.5U, 16458.0L, 16680.0L, 17080.0L, 17380.0L, 19098.0L, 19200.0U, 20400.0L, 22245.0L</p>
+        <p><em>(U = USB, L = LSB)</em></p>
+    </div>
+
+    <h3>Navy ALE Networks</h3>
+    <table class="data-table">
+        <thead><tr><th>Frequency</th><th>Network</th><th>Key Stations</th></tr></thead>
+        <tbody>
+            <tr><td><strong>7310.0 USB</strong></td><td>Riverine HQ Network</td><td>Base Naval Ciudad Bol&iacute;var; Addresses 0-4 (Floating Posts &amp; Patrol Launches)</td></tr>
+            <tr><td><strong>8280.0 LSB</strong></td><td>Riverine Forces</td><td>COFFMU1 (Comando Fluvial Fronterizo); DIV (Naval Infantry Command, Vargas)</td></tr>
+            <tr><td><strong>10650.0 LSB</strong></td><td>Coast Guard</td><td>DCCOP (Central Ops, Caracas); GC12 (ARBV General Mor&aacute;n); T64 (LSM Los Llanos)</td></tr>
+            <tr><td><strong>20400.0 LSB</strong></td><td>Riverine Ops</td><td>ABC Riverine HQ; DIVIMCO1 (Marine Infantry); PNEN1 (Orinoco-Apure Axis)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Naval Vessel ALE Call Signs</h3>
+    <table class="data-table">
+        <thead><tr><th>Hull #</th><th>Vessel Name</th><th>ALE Call Sign(s)</th><th>Type</th></tr></thead>
+        <tbody>
+            <tr><td>F-21</td><td>Mariscal Sucre</td><td>5JL1, SUCRE</td><td>Frigate</td></tr>
+            <tr><td>F-22</td><td>Almirante Bri&oacute;n</td><td>BRION</td><td>Frigate</td></tr>
+            <tr><td>F-24</td><td>General Soublette</td><td>1C3Z, 5JL1, T5L1, SOUBLETTE</td><td>Frigate</td></tr>
+            <tr><td>T-61</td><td>Capana</td><td>1W1S, CAPANA</td><td>LST</td></tr>
+            <tr><td>T-62</td><td>Esequibo</td><td>4T8S, ESQUIBO</td><td>LST</td></tr>
+            <tr><td>T-63</td><td>Goijaira</td><td>2TB9</td><td>LST</td></tr>
+            <tr><td>T-64</td><td>Los Llanos</td><td>3V2Y, 8DV9, LLANOS</td><td>LST</td></tr>
+            <tr><td>T-72</td><td>La Orchila</td><td>6QA8</td><td>Support</td></tr>
+            <tr><td>T-81</td><td>Supply Ship</td><td>9AH4</td><td>Supply</td></tr>
+            <tr><td>BE-11</td><td>Sim&oacute;n Bol&iacute;var</td><td>BOLIVAR</td><td>Training</td></tr>
+            <tr><td>PC-11</td><td>Constituci&oacute;n</td><td>CONSTITUCION, PC11</td><td>Patrol</td></tr>
+            <tr><td>PC-12</td><td>Federaci&oacute;n</td><td>FEDERACION, PC12</td><td>Patrol</td></tr>
+            <tr><td>PC-13</td><td>Independencia</td><td>INDEPENDENCIA, PC13</td><td>Patrol</td></tr>
+            <tr><td>PC-14</td><td>Libertad</td><td>LIBERTAD</td><td>Patrol</td></tr>
+            <tr><td>PC-16</td><td>V&iacute;ctor</td><td>VICTOR, PC16</td><td>Patrol</td></tr>
+            <tr><td>GC-11</td><td>Almirante Clemente</td><td>CLEMENTE, GC11</td><td>Coast Guard</td></tr>
+            <tr><td>GC-12</td><td>Gral. Trinidad Mor&aacute;n</td><td>GC12, MORAN</td><td>Coast Guard</td></tr>
+            <tr><td>GC-21</td><td>Guaicamacuto</td><td>&mdash;</td><td>Coast Guard</td></tr>
+            <tr><td>B-8424</td><td>R&iacute;o Negro</td><td>NEGRON</td><td>Patrol</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Navy Command ALE Identifiers (80+)</h3>
+    <div class="highlight-box blue-border">
+        <p><strong>Command &amp; HQ:</strong> ADIPC, ARMARIO, BDIRCO, BNA, BNARAB, BNARCO, BNARTEL, BNF, BNFACO, BNG, BNGU, BRIFFR, BRIFFRI5, CANCO, CANES, CEDAOR, CEDCOM, CEDCOMEBA, CEDCOMEF, CEDEFCOP, CEDLO, CEDOP, CEDOPGR, CEOFAB, CEOFL, CFLCO, CGA, CGA3, CGACO, CGARM, CGUARD, CGUARDOP, CNZACE, CNZEDOP, COFFRI1, COFL, COMEDRA, CUMANA, CZNACEN, DCCOP, DHN, DICO, DIVIMBO, DIVIMCO1, EGR, EPAR, EPG, EPGLG, EPN, ESGN, ESOAR, ETAR, FALCON, JCCOP, OCAMAR</p>
+        <p><strong>Riverine Posts:</strong> PNFA1, PNFA3, PNFA5 (Orinoco-Apure) &bull; PNME2-5 (R&iacute;o Meta) &bull; PNRN4-5 (R&iacute;o Negro) &bull; PNPP5 &bull; PNEN1 (Orinoco-Apure Axis)</p>
+        <p><strong>Radio Stations:</strong> PR1, PR2, PR4, PR5</p>
+        <p><strong>Zone IDs:</strong> ZNACEN, ZNAOR, VARGAS</p>
+    </div>
+
+    <h3>Air Force Bases (9 with GPS)</h3>
+    <table class="data-table">
+        <thead><tr><th>Base</th><th>Location</th><th>Coordinates</th></tr></thead>
+        <tbody>
+            <tr><td><strong>LT Vicente Landaeta Gil AB</strong></td><td>Barquisimeto</td><td>10&deg;02'33.50"N 069&deg;21'30.80"W</td></tr>
+            <tr><td><strong>Luis del Valle Garc&iacute;a AB</strong></td><td>Barcelona</td><td>10&deg;06'25.70"N 064&deg;41'20.98"W</td></tr>
+            <tr><td><strong>Base A&eacute;rea Mariscal Sucre</strong></td><td>Boca del R&iacute;o</td><td>10&deg;14'59.92"N 067&deg;38'57.91"W</td></tr>
+            <tr><td><strong>Francisco de Miranda AB</strong></td><td>Caracas/La Carlota</td><td>10&deg;29'06.12"N 066&deg;50'36.66"W</td></tr>
+            <tr><td><strong>Rafael Urdaneta AB</strong></td><td>Maracaibo</td><td>10&deg;33'29.55"N 071&deg;43'40.28"W</td></tr>
+            <tr><td><strong>El Libertador AB</strong></td><td>Maracay/Palo Negro</td><td>10&deg;11'00.15"N 067&deg;33'26.35"W</td></tr>
+            <tr><td><strong>Gral. Jos&eacute; Antonio P&aacute;ez AB</strong></td><td>Puerto Ayacucho</td><td>05&deg;37'11.97"N 067&deg;36'21.97"W</td></tr>
+            <tr><td><strong>Santo Domingo FAB</strong></td><td>Santo Domingo</td><td>07&deg;33'54.40"N 072&deg;02'06.45"W</td></tr>
+            <tr><td><strong>San Antonio del T&aacute;chira FAB</strong></td><td>San Antonio</td><td>07&deg;51'08.75"N 072&deg;26'05.76"W</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Aeronautical Frequencies</h3>
+    <table class="data-table">
+        <thead><tr><th>Category</th><th>Frequencies</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Caracas/Maiquetía VHF</strong></td><td>118.1, 118.4, 119.3, 119.5, 120.4, 121.7, 121.9 MHz &bull; VOR: 114.8 MHz</td></tr>
+            <tr><td><strong>HF Aeronautical</strong></td><td>3010, 6643, 8924, 11345, 17937, 21976 kHz</td></tr>
+            <tr><td><strong>Caribbean VOLMET</strong></td><td>2950, 5580, 11315 kHz</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Naval Bases</h3>
+    <table class="data-table">
+        <thead><tr><th>Base</th><th>Location</th><th>Assets</th><th>Type</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Puerto Cabello ("Armario")</strong></td><td>Carabobo</td><td>Frigate Squadron (F-21, F-22, F-24, F-26), Amphibious Squadron</td><td><span class="badge badge-blue">MAJOR</span></td></tr>
+            <tr><td><strong>Punto Fijo</strong></td><td>Falc&oacute;n</td><td>Patrol Squadron (PC-11 through PC-16)</td><td><span class="badge badge-blue">MAJOR</span></td></tr>
+            <tr><td><strong>La Guaira</strong></td><td>Vargas</td><td>Coast Guard (GC-11, GC-12)</td><td><span class="badge badge-blue">MAJOR</span></td></tr>
+            <tr><td><strong>Caracas</strong></td><td>Caracas</td><td>&mdash;</td><td>Major</td></tr>
+            <tr><td><strong>Maracaibo</strong></td><td>Zulia</td><td>&mdash;</td><td>Minor</td></tr>
+            <tr><td><strong>Ciudad Bol&iacute;var</strong></td><td>Bol&iacute;var</td><td>Riverine HQ</td><td>Minor</td></tr>
+            <tr><td><strong>El Amparo</strong></td><td>Apure</td><td>&mdash;</td><td>Minor</td></tr>
+            <tr><td><strong>Turiamo</strong></td><td>Aragua</td><td>&mdash;</td><td>Naval Airbase</td></tr>
+            <tr><td><strong>Puerto Hierro</strong></td><td>Sucre</td><td>&mdash;</td><td>Naval Airbase</td></tr>
+            <tr><td><strong>La Orchila</strong></td><td>Island</td><td>&mdash;</td><td>Naval Airbase</td></tr>
+        </tbody>
+    </table>
+
+    <p>The ALE identifiers are equally valuable. Each call sign maps to a specific unit or vessel. When "DIVSUP" connects to "REGCOM3" on 8060.0 kHz, you know the Division of Supply is contacting Regional Command 3. When "PCGFLU" transmits, that's a Coast Guard river patrol. When "FRALUI" calls in, that's the frigate Almirante Bri&oacute;n.</p>
+
+    <div class="highlight-box">
+        <p>Every one of these frequencies is monitorable with consumer-grade equipment. An SDR dongle, a wire antenna, and a laptop anywhere in the Caribbean can intercept HF communications across the entire Venezuelan military.</p>
+    </div>
+
+    <!-- SECTION 2 -->
+    <h2 id="satellite">2. The Satellite Is Dead</h2>
+
+    <p>VeneSat-1, the Sim&oacute;n Bol&iacute;var satellite, was Venezuela's crown jewel &mdash; a <strong>$390 million</strong> Chinese-built communications satellite launched October 2008 from Xichang, China. It carried 28 transponders: 14 C-band, 12 Ku-band, and 2 Ka-band (exclusive to Venezuelan territory).</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Band</th>
+                <th>Count</th>
+                <th>Downlink (MHz)</th>
+                <th>Uplink (MHz)</th>
+                <th>Coverage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>C-band</strong></td>
+                <td>14</td>
+                <td>3,700&ndash;4,200</td>
+                <td>5,925&ndash;6,425</td>
+                <td>Caribbean + South America</td>
+            </tr>
+            <tr>
+                <td><strong>Ku-band</strong></td>
+                <td>12</td>
+                <td>11,280&ndash;11,700</td>
+                <td>14,080&ndash;14,500</td>
+                <td>Cuba, DR, Bolivia, Paraguay, Uruguay</td>
+            </tr>
+            <tr>
+                <td><strong>Ka-band</strong></td>
+                <td>2</td>
+                <td>19,000&ndash;19,300</td>
+                <td>28,800&ndash;29,100</td>
+                <td><span class="badge badge-red">Venezuela Only</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Death Timeline</h3>
+    <ul>
+        <li><strong>February 2020:</strong> First solar array drive mechanism failed</li>
+        <li><strong>March 2020:</strong> Second solar array drive failed &mdash; total power loss</li>
+        <li><strong>March 13, 2020:</strong> Satellite declared out of service, tumbling uncontrolled</li>
+        <li><strong>March 25, 2020:</strong> Ministry of Science officially declared satellite lost</li>
+        <li><strong>Current state:</strong> Tumbling in elliptical orbit ~50 km above GEO &mdash; <span class="badge badge-gray">SPACE DEBRIS</span></li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>March 24, 2020 at 13:13 EST:</strong> Venezuelan government transferred broadcasting to <strong>American Intelsat 14</strong> (45&deg;W, C-band). VTV, TVes, Telesur, Vive TV, Radio Nacional, and Miraflores FM &mdash; the presidential palace radio station &mdash; all migrated to an American satellite.</p>
+        <p>An anti-American regime broadcasting its propaganda through American satellite infrastructure.</p>
+    </div>
+
+    <h3>VeneSat-1 Technical Details</h3>
+    <table class="data-table">
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+            <tr><td>Known active transponder (pre-death)</td><td>3886 MHz, vertical polarization, SR 23000</td></tr>
+            <tr><td>Beacon frequency</td><td>11700V</td></tr>
+            <tr><td>FTA Venezuela (active)</td><td>Intelsat 35e, 34.5&deg;W, 11110 MHz, DVB-S2</td></tr>
+            <tr><td>State media (active)</td><td>Intelsat 14, 45&deg;W, C-band</td></tr>
+            <tr><td>Manufacturer</td><td>China Academy of Space Technology (CAST), DFH-4 bus</td></tr>
+            <tr><td>Contractor</td><td>China Great Wall Industry Corporation (CGWIC)</td></tr>
+            <tr><td>Cost</td><td>$240M (manufacture/launch) + $150M (ground) = <strong>$390M total</strong></td></tr>
+            <tr><td>Mass</td><td>~5,050 kg</td></tr>
+            <tr><td>Orbital slot</td><td>78&deg;W (ceded by Uruguay)</td></tr>
+        </tbody>
+    </table>
+
+    <p><strong>What was NOT transferred:</strong> Ku-band military internet (CANTV Satelital broadband for military, health, education, electoral council, security). Ka-band Venezuela-exclusive transponders &mdash; permanently lost. Venezuela's military lost satellite communications entirely.</p>
+
+    <!-- SECTION 3 -->
+    <h2 id="ground-stations">3. Ground Stations Inside Military Bases</h2>
+
+    <p>Venezuela operates two satellite ground stations, both built by China Great Wall Industry Corporation (CGWIC) and handed over December 1, 2008.</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Station</th>
+                <th>Location</th>
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Baemari / El Sombrero</strong></td>
+                <td>Base A&eacute;rea Militar Capit&aacute;n Manuel R&iacute;os, Gu&aacute;rico state<br><em>9.3563&deg;N, 66.9131&deg;W</em></td>
+                <td>Primary satellite control + teleport</td>
+                <td><span class="badge badge-blue">PRIMARY</span></td>
+            </tr>
+            <tr>
+                <td><strong>Luepa</strong></td>
+                <td>Fort Manikuy&aacute;, Bol&iacute;var state</td>
+                <td>Backup control station</td>
+                <td><span class="badge badge-gray">BACKUP</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <p><strong>Chinese access concern:</strong> China built the entire Operations Management System. Chinese personnel trained all Venezuelan technicians. According to the Washington Post, China may retain remote access even without physical presence. The House Select Committee on China flagged these as having <strong>"dual-use military applications."</strong></p>
+    </div>
+
+    <!-- SECTION 4 -->
+    <h2 id="air-defense">4. Air Defense &mdash; The Paper Tiger</h2>
+
+    <p>Venezuela's Integrated Air Defense System (SINODAM/SINDA) is a multi-layered network of Chinese radars and Russian surface-to-air missiles:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>System</th>
+                <th>Type</th>
+                <th>Origin</th>
+                <th>Jan 2026 Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>JY-27A</strong></td>
+                <td>Long-range surveillance radar (12+)</td>
+                <td>China (CETC)</td>
+                <td><span class="badge badge-red">JAMMED</span></td>
+            </tr>
+            <tr>
+                <td><strong>S-300VM</strong></td>
+                <td>Long-range SAM</td>
+                <td>Russia</td>
+                <td><span class="badge badge-red">NOT CONNECTED</span></td>
+            </tr>
+            <tr>
+                <td><strong>BUK M-2</strong></td>
+                <td>Medium-range SAM</td>
+                <td>Russia</td>
+                <td><span class="badge badge-red">NOT CONNECTED</span></td>
+            </tr>
+            <tr>
+                <td><strong>FK-3</strong></td>
+                <td>Medium-range SAM</td>
+                <td>China</td>
+                <td><span class="badge badge-red">FAILED</span></td>
+            </tr>
+            <tr>
+                <td><strong>Pantsir-S1</strong></td>
+                <td>Short-range point defense</td>
+                <td>Russia</td>
+                <td><span class="badge badge-red">FAILED</span></td>
+            </tr>
+            <tr>
+                <td><strong>S-125 Pechora</strong></td>
+                <td>Legacy SAM</td>
+                <td>Russia</td>
+                <td><span class="badge badge-gray">OBSOLETE</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <p><strong>January 3, 2026:</strong> Every single layer failed. US Navy EA-18G Growlers deployed electronic attack that blinded every Chinese radar. The S-300VM and BUK M-2 batteries weren't even connected to their engagement radars. Anti-radiation missiles destroyed emitters that attempted to activate.</p>
+        <p>Billions in Russian and Chinese air defense equipment. Defeated by electronic warfare aircraft.</p>
+    </div>
+
+    <!-- SECTION 5 -->
+    <h2 id="pipeline">5. The Five-Country Intelligence Pipeline</h2>
+
+    <div class="pipeline">
+        <div class="pipeline-node china">CHINA<br><small>Tech &amp; Radars</small></div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-node cuba">CUBA<br><small>SIGINT Analysis</small></div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-node venezuela">VENEZUELA<br><small>Enforcement</small></div>
+        <div class="pipeline-arrow">&larr;</div>
+        <div class="pipeline-node russia">RUSSIA<br><small>Modernization</small></div>
+        <div class="pipeline-arrow">&larr;</div>
+        <div class="pipeline-node iran">IRAN<br><small>Manufacturing</small></div>
+    </div>
+
+    <ul>
+        <li><strong>China</strong> provides JY-27A radars (CETC), CANTV telecom backbone (ZTE/Huawei), CEIEC "Great Firewall" deep packet inspection, facial recognition for SEBIN, and the Sistema Patria surveillance database.</li>
+        <li><strong>Cuba</strong> runs ~500 military advisors in Venezuela. SIGINT stations at Lourdes and Bejucal near Havana monitor the Caribbean with triangulation over thousands of kilometers. Data flows to correlation centers in Havana. Chinese radar feeds from SINDA are shared with Cuba.</li>
+        <li><strong>Venezuela</strong> enforces domestically through DGCIM (military counterintelligence &mdash; intercepts calls, SMS, email, deploys malware) and SEBIN (Helicoide complex + La Tumba underground detention).</li>
+        <li><strong>Russia</strong> modernizes Cuban surveillance infrastructure and provides Venezuela with secure comms gear, electronic warfare equipment, and S-300VM systems.</li>
+        <li><strong>Iran</strong> manufactures fiber optic cable through Venefibra ($10M factory in Catia la Mar) and supplies Peykaap III fast attack craft with Nasr anti-ship missiles.</li>
+    </ul>
+
+    <div class="highlight-box yellow-border">
+        <p><strong>Physical backbone:</strong> ALBA-1, a 1,630 km submarine fiber optic cable running directly from La Guaira, Venezuela to Siboney, Cuba. Owned by Telecomunicaciones Gran Caribe (60% Venezuelan state). This is the wire carrying intelligence data to Cuban analysis centers in Havana.</p>
+    </div>
+
+    <h3>G-Network &mdash; The Node That Ties It Together</h3>
+    <p>Telecomunicaciones G-Network C.A. &mdash; an ISP founded 2021 in La Guaira that received its CONATEL license in 4 months (normally takes years). Deployed 28 km of fiber along the presidential highway using unmarked vans. Infrastructure runs 200&ndash;500 meters from SEBIN headquarters.</p>
+    <p>A SEBIN operative's server was discovered at <strong>38.61.255.205:5000</strong> on G-Network IP space, created by an active SEBIN officer on the UN-documented torture list. G-Network employs a Russian consultant from Volgograd State Technical University. Five km away, an Iranian fiber optic factory produces cable.</p>
+
+    <!-- SECTION 6 -->
+    <h2 id="operation">6. Operation Absolute Resolve &mdash; Cyber Dimension</h2>
+
+    <h3>January 3, 2026</h3>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>T-14 hours</strong></td>
+                <td>BGP traffic redirection detected &mdash; intelligence gathering</td>
+                <td>CYBERCOM</td>
+            </tr>
+            <tr>
+                <td><strong>02:00 AM</strong></td>
+                <td>Power grid across Caracas blacked out via SCADA compromise</td>
+                <td>CYBERCOM</td>
+            </tr>
+            <tr>
+                <td><strong>02:01 AM</strong></td>
+                <td>US helicopters began landing &mdash; 1-minute cyber-to-kinetic</td>
+                <td>SOCOM</td>
+            </tr>
+            <tr>
+                <td><strong>02:01+ AM</strong></td>
+                <td>EA-18G Growlers jam all radar and communications</td>
+                <td>SPACECOM / Navy</td>
+            </tr>
+            <tr>
+                <td><strong>Result</strong></td>
+                <td>Maduro captured. Venezuelan C2 completely paralyzed.</td>
+                <td>&mdash;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <p><strong>What survived?</strong> HF radio. The same frequencies documented in this investigation. The 3&ndash;30 MHz bands that propagate via ionospheric skip, require no infrastructure, can't be taken down by a cyber attack, and can only be jammed within line-of-sight.</p>
+        <p>Every frequency in this document is the fallback the Venezuelan military reverts to when everything modern fails. On January 3, 2026, <strong>everything modern failed</strong>.</p>
+    </div>
+
+    <!-- SECTION 7 -->
+    <h2 id="infrastructure">7. Exposed Infrastructure</h2>
+
+    <h3>CANTV Internal Architecture (from GitHub)</h3>
+    <p>The Covetel cooperative published CANTV's email and portal architecture publicly on GitHub:</p>
+    <ul>
+        <li><strong>Exchange server:</strong> owacorp.cantv.com.ve</li>
+        <li><strong>SOGo mail:</strong> sogo.cantv.com.ve</li>
+        <li><strong>CMS:</strong> Plone/Zope with PostgreSQL backend</li>
+        <li><strong>Directory:</strong> LDAP integration</li>
+    </ul>
+
+    <h3>CONATEL Subdomains (All Live)</h3>
+    <table class="data-table">
+        <thead><tr><th>Subdomain</th><th>Function</th><th>Tech</th></tr></thead>
+        <tbody>
+            <tr><td><strong>conatelenlinea.conatel.gob.ve</strong></td><td>Online services portal</td><td>Yii PHP framework</td></tr>
+            <tr><td><strong>sigestel.conatel.gob.ve</strong></td><td>Telecom management (licensing/certification)</td><td>&mdash;</td></tr>
+            <tr><td><strong>sac.conatel.gob.ve</strong></td><td>Citizen services</td><td>&mdash;</td></tr>
+            <tr><td><strong>registroeventos.conatel.gob.ve</strong></td><td>Event registration</td><td>&mdash;</td></tr>
+            <tr><td><strong>habilita.conatel.gob.ve</strong></td><td>Telecom licensing portal</td><td>Live</td></tr>
+            <tr><td><strong>homologa.conatel.gob.ve</strong></td><td>Equipment certification</td><td>502 Bad Gateway</td></tr>
+        </tbody>
+    </table>
+
+    <h3>SEBIN Infrastructure on G-Network</h3>
+    <table class="data-table">
+        <thead><tr><th>Item</th><th>Detail</th></tr></thead>
+        <tbody>
+            <tr><td><strong>SEBIN Server</strong></td><td>38.61.255.205:5000 &mdash; Flask/Python login portal on G-Network IP space (ASN 272122)</td></tr>
+            <tr><td><strong>Created by</strong></td><td>Detective Javier Ochoa &mdash; active SEBIN officer, UN torture list (17 officers)</td></tr>
+            <tr><td><strong>G-Network Fiber</strong></td><td>28 km along Caracas-La Guaira presidential highway, deployed with unmarked vans</td></tr>
+            <tr><td><strong>Proximity</strong></td><td>G-Network infrastructure 200&ndash;500m from SEBIN HQ (Plaza Venezuela)</td></tr>
+            <tr><td><strong>Russian Consultant</strong></td><td>Vadim Sidorov (Volgograd State Technical University) employed at G-Network</td></tr>
+            <tr><td><strong>Iranian Factory</strong></td><td>Venefibra fiber optic factory, 5 km from G-Network, $10M, operational Aug 2025</td></tr>
+            <tr><td><strong>CONATEL License</strong></td><td>Obtained in 4 months (normally takes years) &mdash; political connections to Governor Ter&aacute;n (PSUV)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Hytera TETRA Police Radios</h3>
+    <table class="data-table">
+        <thead><tr><th>Equipment</th><th>Type</th><th>Notes</th></tr></thead>
+        <tbody>
+            <tr><td><strong>PT580H</strong></td><td>TETRA handheld portable</td><td>Caracas Police</td></tr>
+            <tr><td><strong>MT680</strong></td><td>TETRA mobile radio (vehicle-mounted)</td><td>Caracas Police</td></tr>
+            <tr><td><strong>DIB-R5</strong></td><td>TETRA base stations with TEDS</td><td>Redundant backup at separate locations</td></tr>
+        </tbody>
+    </table>
+    <div class="highlight-box">
+        <p><strong>Vulnerability:</strong> TEA1 encryption &mdash; TETRA:BURST backdoor (discovered July 2023). <strong>Manufacturer:</strong> Hytera Communications, Shenzhen, China. Another Chinese company providing Venezuela's security communications with a documented cryptographic weakness.</p>
+    </div>
+
+    <h3>Submarine Cables</h3>
+    <table class="data-table">
+        <thead><tr><th>Cable</th><th>Route</th><th>Length</th><th>Notes</th></tr></thead>
+        <tbody>
+            <tr><td><strong>ALBA-1</strong></td><td>La Guaira &rarr; Siboney, Cuba &rarr; Ocho Rios, Jamaica</td><td>1,630 km</td><td><span class="badge badge-red">INTEL PIPELINE</span> 60% Venezuelan state-owned</td></tr>
+            <tr><td><strong>CANTV Coastal</strong></td><td>Maracaibo to Carup&aacute;no (13 cities)</td><td>&mdash;</td><td>$80M domestic cable</td></tr>
+            <tr><td><strong>ARCOS-1</strong></td><td>24 landing points, 15 countries</td><td>8,700 km</td><td>International backbone</td></tr>
+            <tr><td><strong>AMERICAS-II</strong></td><td>USA &rarr; PR &rarr; USVI &rarr; Martinique &rarr; Cura&ccedil;ao &rarr; Trinidad &rarr; Venezuela &rarr; Brazil</td><td>&mdash;</td><td>International</td></tr>
+            <tr><td><strong>ECFS</strong></td><td>Eastern Caribbean to Venezuela</td><td>&mdash;</td><td>Caribbean island chain</td></tr>
+        </tbody>
+    </table>
+
+    <h3>CEIEC &mdash; China's Great Firewall for Venezuela</h3>
+    <p>US Treasury/OFAC sanctioned CEIEC (China National Electronics Import &amp; Export Corporation) in November 2020 for providing CANTV with a "commercialized version of China's Great Firewall" &mdash; deep packet inspection, keyword filtering, traffic shaping, and metadata collection. CANTV controls ~70% of Venezuela's internet.</p>
+    <p><strong>Censorship hierarchy:</strong> CEIEC (China) &rarr; CANTV (state) &rarr; CONATEL (regulator) &rarr; Private ISPs</p>
+
+    <h3>Chinese Infrastructure Penetration</h3>
+    <ul>
+        <li><strong>Huawei:</strong> 1,400+ workers in Venezuela (400 Chinese), fiber optic network, military DICOFAN work, 5G</li>
+        <li><strong>ZTE:</strong> Sistema Patria surveillance, CANTV infrastructure, communication antennas, Vtelca joint venture</li>
+        <li>Both companies have knowledge of &quot;significant portions of the communications, data, and command and control architectures&quot;</li>
+    </ul>
+
+    <h3>CEOFANB Website (Probed March 2026)</h3>
+    <ul>
+        <li><strong>ceofanb.mil.ve</strong> &mdash; WordPress + nginx, WordFence security</li>
+        <li>REST API: <strong>locked</strong> (rest_login_required &mdash; 401)</li>
+        <li>XML-RPC: <strong>blocked</strong> (403 Forbidden)</li>
+        <li>Google Analytics: UA-105348112-1</li>
+        <li>Internal email: correo.ceofanb.mil.ve (unreachable externally)</li>
+    </ul>
+
+    <!-- SECTION 8 -->
+    <h2 id="starlink">8. Starlink &mdash; The Regime's Nightmare</h2>
+
+    <p>Starlink does not officially serve Venezuela &mdash; one of the only Latin American countries dark on the coverage map. But terminals are smuggled from Colombia and Argentina, selling on Telegram for $60&ndash;$600+.</p>
+
+    <p>Within 48 hours of Operation Absolute Resolve, Starlink offered <strong>free internet to all Venezuelans</strong>.</p>
+
+    <div class="highlight-box blue-border">
+        <p>They can't block it. They can't jam it from the ground. They can't intercept it. They can't shut it down. CEIEC's Great Firewall is useless against it. CONATEL's censorship orders don't reach space.</p>
+        <p>For a regime that built its entire surveillance apparatus around controlling the wire, a communications system that <strong>doesn't use the wire</strong> is an existential threat.</p>
+    </div>
+
+    <!-- SECTION 9 -->
+    <h2 id="naval">9. Naval Order of Battle 2026</h2>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Class</th>
+                <th>Count</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Submarines</td>
+                <td>Type 209/1300</td>
+                <td>2</td>
+                <td><span class="badge badge-gray">NON-OPERATIONAL</span></td>
+            </tr>
+            <tr>
+                <td>Submarines</td>
+                <td>VAS 525 mini-sub</td>
+                <td>1</td>
+                <td>Active</td>
+            </tr>
+            <tr>
+                <td>Frigates</td>
+                <td>Almirante Brion</td>
+                <td>1</td>
+                <td>Missile frigate</td>
+            </tr>
+            <tr>
+                <td>Patrol</td>
+                <td>Gavi&oacute;n-class</td>
+                <td>12</td>
+                <td>&mdash;</td>
+            </tr>
+            <tr>
+                <td>Patrol</td>
+                <td>Point-class</td>
+                <td>4</td>
+                <td>&mdash;</td>
+            </tr>
+            <tr>
+                <td>Patrol</td>
+                <td>P&aacute;galo-class</td>
+                <td>2</td>
+                <td>&mdash;</td>
+            </tr>
+            <tr>
+                <td>Patrol</td>
+                <td>Guaicamacuto-class</td>
+                <td>3</td>
+                <td>&mdash;</td>
+            </tr>
+            <tr>
+                <td><strong>Fast Attack</strong></td>
+                <td><strong>Peykaap III</strong></td>
+                <td>Multiple</td>
+                <td><span class="badge badge-red">IRANIAN-MADE</span> Nasr missiles</td>
+            </tr>
+            <tr>
+                <td>Amphibious</td>
+                <td>Capana-class LST</td>
+                <td>4</td>
+                <td>Landing ships</td>
+            </tr>
+            <tr>
+                <td>Coastal</td>
+                <td>Constituci&oacute;n-class</td>
+                <td>3</td>
+                <td>Gunboats</td>
+            </tr>
+            <tr>
+                <td>Support</td>
+                <td>Various</td>
+                <td>7</td>
+                <td>Tug, supply, oceanographic</td>
+            </tr>
+            <tr>
+                <td>Training</td>
+                <td>Sim&oacute;n Bol&iacute;var</td>
+                <td>1</td>
+                <td>Sail training</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Iranian Peykaap III Fast Attack Craft &mdash; Full Specifications</h3>
+    <table class="data-table">
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+            <tr><td>Origin</td><td>Islamic Revolutionary Guard Corps Navy (IRGC-N), North Korean-derived hull</td></tr>
+            <tr><td>Length</td><td>17.3m (56 ft 9 in)</td></tr>
+            <tr><td>Beam</td><td>3.75m</td></tr>
+            <tr><td>Draft</td><td>0.7m</td></tr>
+            <tr><td>Displacement</td><td>~13.75 tons</td></tr>
+            <tr><td>Speed</td><td><strong>50+ knots</strong></td></tr>
+            <tr><td>Crew</td><td>3</td></tr>
+            <tr><td>Armament</td><td>2&times; Nasr anti-ship missile launchers + machine guns</td></tr>
+            <tr><td>Nasr Missile</td><td>Iranian copy of Chinese C-704, TV + mmWave radar guidance</td></tr>
+            <tr><td>Range</td><td>35 km (export CM-90 variant: 90 km)</td></tr>
+            <tr><td>Tactics</td><td>High-speed swarm attacks in confined maritime environments</td></tr>
+        </tbody>
+    </table>
+    <div class="highlight-box yellow-border">
+        <p>The weapons pipeline mirrors the telecom pipeline &mdash; Iran manufactures, China designs, Venezuela deploys. Shown in Venezuelan naval parade July 2023, deployed in Caribbean waters.</p>
+    </div>
+
+    <h3>Submarine Communications Gap</h3>
+    <div class="highlight-box">
+        <p>Venezuela has <strong>NO ELF/VLF submarine communication infrastructure</strong>. Only the US, Russia, India, and China operate ELF facilities. The two Type 209/1300 submarines (S&aacute;balo and Caribe) are reportedly non-operational &mdash; haven't been to sea in years. Even if operational, submerged they would be <strong>completely cut off from command</strong>. Surfaced comms would use Navy HF frequencies listed above.</p>
+    </div>
+
+    <h3>ALBA-1 Submarine Cable &mdash; Intelligence Pipeline</h3>
+    <table class="data-table">
+        <thead><tr><th>Parameter</th><th>Detail</th></tr></thead>
+        <tbody>
+            <tr><td>Length</td><td>1,630 km</td></tr>
+            <tr><td>Route</td><td>La Guaira, Venezuela &rarr; Siboney, Cuba (direct)</td></tr>
+            <tr><td>Owner</td><td>Telecomunicaciones Gran Caribe (60% Venezuelan state, 40% Cuba's Transbit)</td></tr>
+            <tr><td>Function</td><td>Physical backbone of Venezuela-Cuba intelligence data transfer</td></tr>
+            <tr><td>Chinese radar feeds</td><td>SINODAM/SINDA data shared with Cuban SIGINT via this cable</td></tr>
+            <tr><td>Status during Op Absolute Resolve</td><td>Unknown if disrupted</td></tr>
+        </tbody>
+    </table>
+
+    <!-- SECTION 10 -->
+    <h2 id="findings">10. Key Findings</h2>
+
+    <div class="finding">
+        <span class="finding-number">1</span>
+        <span class="finding-title">Everything is Chinese.</span>
+        <div class="finding-body">The telecom backbone (CANTV), radar systems (JY-27A), missile systems (FK-3), surveillance systems (Sistema Patria), and the national satellite (VeneSat-1) &mdash; all built by ZTE, Huawei, or CETC. China has knowledge of Venezuela's entire C2 architecture.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">2</span>
+        <span class="finding-title">HF radio is the backbone &mdash; and the only thing that survived.</span>
+        <div class="finding-body">130+ frequencies with ALE across 6 military regions. When CYBERCOM killed the power grid and Growlers jammed the radars on January 3, HF was the only C2 channel still functioning. Every frequency is monitorable with a $30 SDR.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">3</span>
+        <span class="finding-title">Cross-branch sharing exposes the entire network.</span>
+        <div class="finding-body">Army, Navy, and National Guard share at least 3 frequencies (7849.0, 10272.0, 10600.0 kHz). Monitor one branch, hear all three.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">4</span>
+        <span class="finding-title">Air defense is a paper tiger.</span>
+        <div class="finding-body">The January 2026 operation proved every Chinese radar and Russian SAM failed. BUK and S-300VM weren't even connected to radars during the attack.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">5</span>
+        <span class="finding-title">The satellite is dead &mdash; they depend on American infrastructure.</span>
+        <div class="finding-body">VeneSat-1 ($390M) died March 2020. State media broadcasts via American Intelsat 14 and 35e. Military Ku-band internet was never replaced. Ka-band transponders permanently lost.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">6</span>
+        <span class="finding-title">Five-country intelligence pipeline fully mapped.</span>
+        <div class="finding-body">China &rarr; Cuba &rarr; Venezuela &larr; Russia &larr; Iran. ALBA-1 submarine cable (1,630 km, La Guaira to Siboney) is the physical backbone. Chinese radar feeds shared with Havana SIGINT stations.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">7</span>
+        <span class="finding-title">Ground stations inside military bases with Chinese remote access.</span>
+        <div class="finding-body">Baemari primary station at 9.3563&deg;N, 66.9131&deg;W &mdash; inside Capit&aacute;n Manuel R&iacute;os Military Airbase. China built it, may still access it remotely. House Select Committee flagged "dual-use military applications."</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">8</span>
+        <span class="finding-title">China-Russia-Iran-SEBIN convergence in telecom.</span>
+        <div class="finding-body">G-Network ISP hosts SEBIN server (38.61.255.205:5000), employs a Russian consultant, and sits 5 km from an Iranian fiber optic factory. Four authoritarian actors, one telecom infrastructure.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">9</span>
+        <span class="finding-title">DGCIM has full intercept capability with Cuban advisors.</span>
+        <div class="finding-body">Monitors hundreds of military personnel simultaneously. Intercepts calls, SMS, email, social media. Deploys malware. Cuban advisors provide "enhanced interrogation training." A Navy captain died in custody.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">10</span>
+        <span class="finding-title">Police radios have a known Chinese backdoor.</span>
+        <div class="finding-body">Caracas police use Hytera TETRA radios (Shenzhen, China). TEA1 encryption has the TETRA:BURST backdoor (July 2023). The weapons pipeline mirrors the telecom pipeline.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">11</span>
+        <span class="finding-title">CANTV infrastructure exposed on GitHub.</span>
+        <div class="finding-body">Covetel cooperative published CANTV's Exchange server, SOGo mail, PostgreSQL, Plone/Zope CMS, and LDAP directory publicly. Six live CONATEL subdomains discovered.</div>
+    </div>
+
+    <div class="finding">
+        <span class="finding-number">12</span>
+        <span class="finding-title">Starlink is the regime's nightmare.</span>
+        <div class="finding-body">Can't block it, can't jam it, can't intercept it. Free service offered post-operation. For a regime built on controlling the wire, a system that doesn't use the wire is existential.</div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 40px;">
+        <p><strong>Read the full narrative investigation on <a href="https://open.substack.com/pub/ringmast4r/p/130-military-frequencies-a-dead-satellite" style="color: var(--blue);">Substack</a>.</strong></p>
+    </div>
+
+</main>
+
+<div class="flag-stripe">
+    <div class="yellow"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+</div>
+
+<footer>
+    <p>This report is based entirely on open-source intelligence (OSINT).</p>
+    <p>No classified information was accessed. No unauthorized systems were penetrated.</p>
+    <p>Every frequency, call sign, coordinate, and technical detail was obtained from publicly available sources.</p>
+    <p style="margin-top: 15px;"><strong>ringmast4r</strong> &mdash; March 2026</p>
+    <div class="classification">OSINT &mdash; OPEN SOURCE</div>
+</footer>
+
+</body>
+</html>
